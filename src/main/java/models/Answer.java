@@ -12,7 +12,7 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(length = 500 , nullable = false)
-    private String test;
+    private String text;
     @Column(name = "is_true")
     private boolean isTrue;
     @ManyToOne

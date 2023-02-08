@@ -28,7 +28,7 @@ public class Question {
 
         int i = 1;
         for (Answer answer:answers)
-            builder.append(i+++": "+answer.getTest()+"\n");
+            builder.append(i+++": "+answer.getText()+"\n");
 
         return builder.toString();
     }

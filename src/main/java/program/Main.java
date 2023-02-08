@@ -1,6 +1,8 @@
 package program;
 
 import com.sun.xml.bind.util.Which;
+import helpClasses.AnswerHandler;
+import helpClasses.QuestionHandler;
 import models.Answer;
 import models.Question;
 import models.Role;
@@ -14,7 +16,65 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
 
-        testLesson_2();
+        Scanner input = new Scanner(System.in);
+        String action = "";
+        do {
+            System.out.println("1-Робота над питаннями\n2-Використовування опитування");
+            System.out.print("->_");
+            action = input.nextLine();
+            switch (action) {
+                case "1": {
+                    menuQuestion();
+                    System.out.print("->_");
+                    String operation = input.nextLine();
+                    try (Session context = HibernateSessionUtils.getSessionFactory().openSession()) {
+
+                        QuestionHandler questionHandler = new QuestionHandler(context);
+                        switch (operation) {
+                            case "1": {
+                                questionHandler.showQuestions();
+                            }
+                            break;
+                            case "2": {
+                                questionHandler.addQuestion();
+                            }
+                            break;
+                            case "3": {
+                                questionHandler.updateQuestion();
+                            }
+                            break;
+                            case "4": {
+                                questionHandler.updateQuestionAnswers();
+                            }
+                            break;
+                            default:
+                                return;
+                        }
+                    }
+                }
+                break;
+                case "2": {
+                    System.out.print("Ведіть кількість питань: ");
+                    int countQuestion = Integer.parseInt(input.nextLine());
+                    AnswerHandler ans = new AnswerHandler(countQuestion);
+                    ans.Start();
+                    System.out.println(ans.toString());
+                }
+                break;
+                default:
+                    return;
+            }
+
+        } while (!action.equals("0"));
+    }
+
+
+    private static void menuQuestion() {
+        System.out.println("0 - Вихід з редагування");
+        System.out.println("1 - Показати всі питання");
+        System.out.println("2 - Додати нове питання");
+        System.out.println("3 - Редагувати запитання по id");
+        System.out.println("4 - Редагувати Відповіді у питанні по id");
     }
 
     private static void menu() {
@@ -28,7 +88,7 @@ public class Main {
     }
 
     //CRUD to database
-    private static void testLesson_1(){
+    private static void testLesson_1() {
         Scanner input = new Scanner(System.in);
         Session context = HibernateSessionUtils.getSessionFactory().openSession();
         Transaction tr = context.getTransaction();
@@ -102,50 +162,47 @@ public class Main {
     }
 
     //Relationship
-    private static void testLesson_2()
-    {
-//        addQuestion();
-        showQuestions();
+    private static void testLesson_2() {
+        addQuestion();
+        // showQuestions();
     }
 
-    private static void addQuestion(){
-        try(Session contect = HibernateSessionUtils.getSessionFactory().openSession()){
+    private static void addQuestion() {
+        try (Session context = HibernateSessionUtils.getSessionFactory().openSession()) {
             Scanner in = new Scanner(System.in);
-            Transaction tx = contect.getTransaction();
-            System.out.print("Вкажіть питання: ");
-            String questionText= in.nextLine();
+            Transaction tx = context.beginTransaction();
+            System.out.println("Вкажіть питання:");
+            String questionText = in.nextLine();
             Question q = new Question();
             q.setName(questionText);
-            contect.save(q);
-            String action ="";
+            context.save(q);
+            String action = "";
             do {
                 System.out.println("Вкажіть відповідь:");
                 String text = in.nextLine();
-                System.out.println("1-правильно , 2-невірно");
-                boolean isTrue = Byte.parseByte(in.nextLine())==1;
-                Answer answer= new Answer();
-                answer.setTest(text);
+                System.out.println("1-правильно, 2-невірно");
+                boolean isTrue = Byte.parseByte(in.nextLine()) == 1;
+                Answer answer = new Answer();
+                answer.setText(text);
                 answer.setTrue(isTrue);
                 answer.setQuestion(q);
-                contect.save(answer);
-                System.out.println("0: Вихід");
-                System.out.println("1: Наступний варіант");
-                System.out.print("->_ ");
+                context.save(answer);
+                System.out.println("0. Вихід");
+                System.out.println("1. Наступний варіант");
+                System.out.println("->_");
                 action = in.nextLine();
-
-            } while(!action.equals("0"));
-
+            } while (!action.equals("0"));
             tx.commit();
         }
     }
 
-    private  static  void showQuestions(){
-        try(Session contect = HibernateSessionUtils.getSessionFactory().openSession()) {
+    private static void showQuestions() {
+        try (Session contect = HibernateSessionUtils.getSessionFactory().openSession()) {
             Query query = contect.createQuery("FROM Question");
-            List<Question>list = query.list();
+            List<Question> list = query.list();
             for (Question q : list)
                 System.out.println(q);
-            }
+        }
 
     }
 }
