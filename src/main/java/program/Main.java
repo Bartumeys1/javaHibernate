@@ -1,11 +1,8 @@
 package program;
 
-import com.sun.xml.bind.util.Which;
 import helpClasses.AnswerHandler;
 import helpClasses.QuestionHandler;
-import models.Answer;
-import models.Question;
-import models.Role;
+import models.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -16,56 +13,7 @@ import java.util.*;
 public class Main {
     public static void main(String[] args) {
 
-        Scanner input = new Scanner(System.in);
-        String action = "";
-        do {
-            System.out.println("1-Робота над питаннями\n2-Використовування опитування");
-            System.out.print("->_");
-            action = input.nextLine();
-            switch (action) {
-                case "1": {
-                    menuQuestion();
-                    System.out.print("->_");
-                    String operation = input.nextLine();
-                    try (Session context = HibernateSessionUtils.getSessionFactory().openSession()) {
-
-                        QuestionHandler questionHandler = new QuestionHandler(context);
-                        switch (operation) {
-                            case "1": {
-                                questionHandler.showQuestions();
-                            }
-                            break;
-                            case "2": {
-                                questionHandler.addQuestion();
-                            }
-                            break;
-                            case "3": {
-                                questionHandler.updateQuestion();
-                            }
-                            break;
-                            case "4": {
-                                questionHandler.updateQuestionAnswers();
-                            }
-                            break;
-                            default:
-                                return;
-                        }
-                    }
-                }
-                break;
-                case "2": {
-                    System.out.print("Ведіть кількість питань: ");
-                    int countQuestion = Integer.parseInt(input.nextLine());
-                    AnswerHandler ans = new AnswerHandler(countQuestion);
-                    ans.Start();
-                    System.out.println(ans.toString());
-                }
-                break;
-                default:
-                    return;
-            }
-
-        } while (!action.equals("0"));
+        testLesson_4();
     }
 
 
@@ -163,7 +111,7 @@ public class Main {
 
     //Relationship
     private static void testLesson_2() {
-        addQuestion();
+        //addQuestion();
         // showQuestions();
     }
 
@@ -204,6 +152,87 @@ public class Main {
                 System.out.println(q);
         }
 
+    }
+
+    private void testLesson_3() {
+        Scanner input = new Scanner(System.in);
+        String action = "";
+        do {
+            System.out.println("1-Робота над питаннями\n2-Використовування опитування");
+            System.out.print("->_");
+            action = input.nextLine();
+            switch (action) {
+                case "1": {
+                    menuQuestion();
+                    System.out.print("->_");
+                    String operation = input.nextLine();
+                    try (Session context = HibernateSessionUtils.getSessionFactory().openSession()) {
+
+                        QuestionHandler questionHandler = new QuestionHandler(context);
+                        switch (operation) {
+                            case "1": {
+                                questionHandler.showQuestions();
+                            }
+                            break;
+                            case "2": {
+                                questionHandler.addQuestion();
+                            }
+                            break;
+                            case "3": {
+                                questionHandler.updateQuestion();
+                            }
+                            break;
+                            case "4": {
+                                questionHandler.updateQuestionAnswers();
+                            }
+                            break;
+                            default:
+                                return;
+                        }
+                    }
+                }
+                break;
+                case "2": {
+                    System.out.print("Ведіть кількість питань: ");
+                    int countQuestion = Integer.parseInt(input.nextLine());
+                    AnswerHandler ans = new AnswerHandler(countQuestion);
+                    ans.Start();
+                    System.out.println(ans.toString());
+                }
+                break;
+                default:
+                    return;
+            }
+
+        } while (!action.equals("0"));
+    }
+
+    private static void testLesson_4() {
+//        AddUserRole();
+        addCategory();
+    }
+
+    private static void AddUserRole() {
+        try (Session context = HibernateSessionUtils.getSessionFactory().openSession()) {
+            Transaction tx = context.beginTransaction();
+            User user = new User("Муха", "Бобер", "bober@gmai.com",
+                    "+38097 98 76 786", "123456");
+            context.save(user);
+            var role = context.get(Role.class, 1);
+            var ur = new UserRole();
+            ur.setUser(user);
+            ur.setRole(role);
+            context.save(ur);
+            tx.commit();
+        }
+    }
+
+    private static void addCategory() {
+        try (Session context = HibernateSessionUtils.getSessionFactory().openSession()) {
+
+//            Category category = new Category("Ноутбуки", "1.jpg", new Date(), false);
+//            context.save(category);
+        }
     }
 }
 
