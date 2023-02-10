@@ -23,6 +23,9 @@ public class HibernateSessionUtils {
                 config.addAnnotatedClass(Product.class);
                 config.addAnnotatedClass(Basket.class);
                 config.addAnnotatedClass(ProductImage.class);
+                config.addAnnotatedClass(OrderStatus.class);
+                config.addAnnotatedClass(Order.class);
+                config.addAnnotatedClass(OrderItem.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                         .applySettings(config.getProperties());
                 sessionFactory = config.buildSessionFactory();

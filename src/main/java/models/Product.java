@@ -33,9 +33,13 @@ public class Product {
     @OneToMany(mappedBy = "product")
     private List<ProductImage> productImages;
 
+    @OneToMany(mappedBy = "product")
+    private List<OrderItem> orderItems;
+
     public Product() {
         userProducts = new ArrayList<>();
         productImages = new ArrayList<>();
+        orderItems = new ArrayList<>();
     }
 
 }

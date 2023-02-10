@@ -27,6 +27,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Basket> userProducts;
 
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
     public User(){
         userRoles = new ArrayList<>();
     }
@@ -38,6 +41,7 @@ public class User {
         this.password = password;
         userRoles = new ArrayList<>();
         userProducts= new ArrayList<>();
+        orders= new ArrayList<>();
     }
 
 }
