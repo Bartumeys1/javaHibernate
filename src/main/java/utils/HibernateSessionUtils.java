@@ -26,6 +26,10 @@ public class HibernateSessionUtils {
                 config.addAnnotatedClass(OrderStatus.class);
                 config.addAnnotatedClass(Order.class);
                 config.addAnnotatedClass(OrderItem.class);
+                config.addAnnotatedClass(FilterValue.class);
+                config.addAnnotatedClass(FilterName.class);
+                config.addAnnotatedClass(FilterNameGroup.class);
+                config.addAnnotatedClass(Filter.class);
                 StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
                         .applySettings(config.getProperties());
                 sessionFactory = config.buildSessionFactory();

@@ -35,11 +35,14 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private List<OrderItem> orderItems;
+    @OneToMany(mappedBy = "product")
+    private List<Filter> productFilters;
 
     public Product() {
         userProducts = new ArrayList<>();
         productImages = new ArrayList<>();
         orderItems = new ArrayList<>();
+        productFilters = new ArrayList<>();
     }
 
 }
